@@ -1,0 +1,7 @@
+1. split data into training and testing
+2. ten subsets of training dataset
+3. train all of them in decission tree
+4. average and select featues using all above 10
+5. slice on;y selected features from training and testing data
+6. feed these features into naive bias
+7.  predict using testing and find accuracy
