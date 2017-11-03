@@ -14,6 +14,8 @@ from sklearn.naive_bayes import MultinomialNB
 
 from sklearn.model_selection import train_test_split
 
+from nb import *
+
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
     "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
@@ -288,6 +290,7 @@ table[0:: ,6] = pred7
 table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
+#table[0:: ,10] = training_label
 
 print "combined table storing results of all 10 predictors on training dataset"
 print(table.shape)
@@ -353,6 +356,7 @@ table[0:: ,6] = pred7
 table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
+#table[0:: ,10] = testing_label
 
 print "combined table storing results of all 10 predictors on testing dataset"
 print(table.shape)
@@ -369,6 +373,40 @@ print "accuracy"
 acc = accuracy_score(testing_label,predictions)
 print(acc*100)
 
+
+
+
+table2 = np.empty((494021,11),dtype='float')
+table2[0:: ,0] = pred1
+table2[0:: ,1] = pred2
+table2[0:: ,2] = pred3
+table2[0:: ,3] = pred4
+table2[0:: ,4] = pred5
+table2[0:: ,5] = pred6
+table2[0:: ,6] = pred7
+table2[0:: ,7] = pred8
+table2[0:: ,8] = pred9
+table2[0:: ,9] = pred10
+table2[0:: ,10] = training_label
+
+
+table3 = np.empty((311029,11),dtype='float')
+table3[0:: ,0] = pred1
+table3[0:: ,1] = pred2
+table3[0:: ,2] = pred3
+table3[0:: ,3] = pred4
+table3[0:: ,4] = pred5
+table3[0:: ,5] = pred6
+table3[0:: ,6] = pred7
+table3[0:: ,7] = pred8
+table3[0:: ,8] = pred9
+table3[0:: ,9] = pred10
+table3[0:: ,10] = testing_label
+
+
+
+
+print(naivebayes(table2,table3))
 
 
 
