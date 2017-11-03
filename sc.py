@@ -26,15 +26,6 @@ col_names = ["duration","protocol_type","service","flag","src_bytes",
     "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
     "dst_host_rerror_rate","dst_host_srv_rerror_rate","label"]
 
-training = pandas.read_csv("training", header=None, names = col_names)
-print "Training dataset shape with label"
-print(training.shape)
-
-testing= pandas.read_csv("testing", header=None, names = col_names)
-print "Testing dataset shape with label"
-print(testing.shape)
-
-
 
 num_features = ["duration","src_bytes",
     "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
@@ -48,43 +39,14 @@ num_features = ["duration","src_bytes",
     "dst_host_rerror_rate","dst_host_srv_rerror_rate"]
 
 
-#print(training['label'].value_counts())
-
-labels = training['label']
-labels[labels=='back.'] = 'dos'
-labels[labels=='buffer_overflow.'] = 'u2r'
-labels[labels=='ftp_write.'] = 'r2l'
-labels[labels=='guess_passwd.'] = 'r2l'
-labels[labels=='imap.'] = 'r2l'
-labels[labels=='ipsweep.'] = 'probe'
-labels[labels=='land.'] = 'dos'
-labels[labels=='loadmodule.'] = 'u2r'
-labels[labels=='multihop.'] = 'r2l'
-labels[labels=='neptune.'] = 'dos'
-labels[labels=='nmap.'] = 'probe'
-labels[labels=='perl.'] = 'u2r'
-labels[labels=='phf.'] = 'r2l'
-labels[labels=='pod.'] = 'dos'
-labels[labels=='portsweep.'] = 'probe'
-labels[labels=='rootkit.'] = 'u2r'
-labels[labels=='satan.'] = 'probe'
-labels[labels=='smurf.'] = 'dos'
-labels[labels=='spy.'] = 'r2l'
-labels[labels=='teardrop.'] = 'dos'
-labels[labels=='warezclient.'] = 'r2l'
-labels[labels=='warezmaster.'] = 'r2l'
 
 
-training_features = training[num_features]
-training_label = training['label']
-print "training data features shape",training_features.shape
-print "training data label shape",training_label.shape
+#testing dataset preperation
 
-#print "types of attacks in training dataset and  their percentage"
-#print(labels.value_counts()/494021*100)
 
-#print(testing['label'].value_counts())
-
+testing= pandas.read_csv("testing", header=None, names = col_names)
+print "Testing dataset shape with label"
+print(testing.shape)
 
 labels = testing['label']
 labels[labels=='back.'] = 'dos'
@@ -127,19 +89,84 @@ labels[labels=='httptunnel.'] = 'r2l'
 labels[labels=='worm.'] = 'r2l'
 labels[labels=='snmpguess.'] = 'r2l'
 
-#print "types of attacks in testing dataset and  their percentage"
-#print(labels.value_counts()/311029*100)
+print "types of attacks in testing dataset and  their percentage"
+print(labels.value_counts()/311029*100)
 
+labels = testing['label']
+labels[labels=='dos'] = '1'
+labels[labels=='normal.'] = '2'
+labels[labels=='probe'] = '3'
+labels[labels=='r2l'] = '4'
+labels[labels=='u2r'] = '5'
+
+print "types of attacks in training dataset and  their percentage"
+print(labels.value_counts()/311029*100)
 
 testing_features = testing[num_features]
-testing_label = testing['label']
 print "testing data features shape",testing_features.shape
+
+testing_label = testing['label']
 print "testing data label shape",testing_label.shape
 
 
 
 
 
+#traing data preperation
+
+training = pandas.read_csv("training", header=None, names = col_names)
+print "Training dataset shape with label"
+print(training.shape)
+
+labels = training['label']
+labels[labels=='back.'] = 'dos'
+labels[labels=='buffer_overflow.'] = 'u2r'
+labels[labels=='ftp_write.'] = 'r2l'
+labels[labels=='guess_passwd.'] = 'r2l'
+labels[labels=='imap.'] = 'r2l'
+labels[labels=='ipsweep.'] = 'probe'
+labels[labels=='land.'] = 'dos'
+labels[labels=='loadmodule.'] = 'u2r'
+labels[labels=='multihop.'] = 'r2l'
+labels[labels=='neptune.'] = 'dos'
+labels[labels=='nmap.'] = 'probe'
+labels[labels=='perl.'] = 'u2r'
+labels[labels=='phf.'] = 'r2l'
+labels[labels=='pod.'] = 'dos'
+labels[labels=='portsweep.'] = 'probe'
+labels[labels=='rootkit.'] = 'u2r'
+labels[labels=='satan.'] = 'probe'
+labels[labels=='smurf.'] = 'dos'
+labels[labels=='spy.'] = 'r2l'
+labels[labels=='teardrop.'] = 'dos'
+labels[labels=='warezclient.'] = 'r2l'
+labels[labels=='warezmaster.'] = 'r2l'
+
+print "types of attacks in training dataset and  their percentage"
+print(labels.value_counts()/494021*100)
+
+labels = training['label']
+labels[labels=='dos'] = '1'
+labels[labels=='normal.'] = '2'
+labels[labels=='probe'] = '3'
+labels[labels=='r2l'] = '4'
+labels[labels=='u2r'] = '5'
+
+print "types of attacks in training dataset and  their percentage"
+print(labels.value_counts()/494021*100)
+
+training_features = training[num_features]
+print "training data features shape",training_features.shape
+
+training_label = training['label']
+print "training data label shape",training_label.shape
+
+
+
+
+
+
+#making 10 subsets of training data
 
 unit = 494021/10
 subset1_features = training_features[0:unit]
@@ -174,6 +201,9 @@ subset10_features = training_features[9*unit:10*unit]
 subset10_label = training_label[9*unit:10*unit]
 
 
+
+#training 10 tree classiefiers
+
 clf1 = tree.DecisionTreeClassifier()
 clf1.fit(subset1_features,subset1_label)
 
@@ -207,43 +237,47 @@ clf10.fit(subset10_features,subset10_label)
 
 
 
-print(training['label'].value_counts())
-print(testing['label'].value_counts())
 
 
+#predicting on training dataset
 
-pred1 = clf1.predict(subset1_features)
+print "following are predictions from 10 classifiers on whole training dataset"
+pred1 = clf1.predict(training_features)
 print(pred1)
 
-pred2 = clf2.predict(subset2_features)
+pred2 = clf2.predict(training_features)
 print(pred2)
 
-pred3 = clf3.predict(subset3_features)
+pred3 = clf3.predict(training_features)
 print(pred3)
 
-pred4 = clf4.predict(subset4_features)
+pred4 = clf4.predict(training_features)
 print(pred4)
 
-pred5 = clf5.predict(subset5_features)
+pred5 = clf5.predict(training_features)
 print(pred5)
 
-pred6 = clf6.predict(subset6_features)
+pred6 = clf6.predict(training_features)
 print(pred6)
 
-pred7 = clf7.predict(subset7_features)
+pred7 = clf7.predict(training_features)
 print(pred7)
 
-pred8 = clf8.predict(subset8_features)
+pred8 = clf8.predict(training_features)
 print(pred8)
 
-pred9 = clf9.predict(subset9_features)
+pred9 = clf9.predict(training_features)
 print(pred9)
 
-pred10 = clf10.predict(subset10_features)
+pred10 = clf10.predict(training_features)
 print(pred10)
 
 
-table = np.empty((49402,10),dtype='string')
+
+
+#making a table of all training predictions
+
+table = np.empty((494021,10),dtype='float')
 table[0:: ,0] = pred1
 table[0:: ,1] = pred2
 table[0:: ,2] = pred3
@@ -255,54 +289,12 @@ table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 
-
-print(table.shape)
-print(table[0:: ,0::])
-
-for i in range(49402):
-	for j in range(10):
-		if(table[i,j]=='d'):
-			table[i,j] = 1
-
-		if(table[i,j]=='n'):
-			table[i,j] = 2
-
-		if(table[i,j]=='p'):
-			table[i,j] = 3
-
-		if(table[i,j]=='r'):
-			table[i,j] = 4
-
-		if(table[i,j]=='u'):
-			table[i,j] = 5
-
-
-table.astype(np.float)
+print "combined table storing results of all 10 predictors on training dataset"
 print(table.shape)
 print(table[0:: ,0::])
 
 
-
-for i in range(494021):
-		if(training_label[i]=='dos'):
-			training_label[i] = 1
-
-		if(training_label[i]=='normal.'):
-			training_label[i] = 2
-
-		if(training_label[i]=='probe'):
-			training_label[i] = 3
-
-		if(training_label[i]=='r2l'):
-			training_label[i] = 4
-
-		if(training_label[i]=='u2r'):
-			training_label[i] = 5
-
-training_label.astype(np.float)
-print(training_label.shape)
-print(training_label)
-
+#Training naive bias classifier
 
 gnb = GaussianNB()
 gnb.fit(table,training_label)
@@ -313,6 +305,69 @@ gnb.fit(table,training_label)
 
 
 
+#predictions for testing data using tree classifier
+
+print "following are predictions from 10 classifiers on whole testing dataset"
+
+pred1 = clf1.predict(testing_features)
+print(pred1)
+
+pred2 = clf2.predict(testing_features)
+print(pred2)
+
+pred3 = clf3.predict(testing_features)
+print(pred3)
+
+pred4 = clf4.predict(testing_features)
+print(pred4)
+
+pred5 = clf5.predict(testing_features)
+print(pred5)
+
+pred6 = clf6.predict(testing_features)
+print(pred6)
+
+pred7 = clf7.predict(testing_features)
+print(pred7)
+
+pred8 = clf8.predict(testing_features)
+print(pred8)
+
+pred9 = clf9.predict(testing_features)
+print(pred9)
+
+pred10 = clf10.predict(testing_features)
+print(pred10)
+
+
+#making a table of all training predictions
+
+table = np.empty((311029,10),dtype='float')
+table[0:: ,0] = pred1
+table[0:: ,1] = pred2
+table[0:: ,2] = pred3
+table[0:: ,3] = pred4
+table[0:: ,4] = pred5
+table[0:: ,5] = pred6
+table[0:: ,6] = pred7
+table[0:: ,7] = pred8
+table[0:: ,8] = pred9
+table[0:: ,9] = pred10
+
+print "combined table storing results of all 10 predictors on testing dataset"
+print(table.shape)
+print(table[0:: ,0::])
+
+#predictions naive bias classifier
+
+predictions = gnb.predict(table)
+print "final predictions on testing data using NB"
+print(predictions)
+
+#finding accuracy
+print "accuracy"
+acc = accuracy_score(testing_label,predictions)
+print(acc*100)
 
 
 

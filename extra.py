@@ -111,3 +111,47 @@ gnb.fit(table[0::,0::],training_label)
 pred2 = gnb.predict()
 acc = accuracy_score()
 print(acc)
+
+
+
+for i in range(49402):
+	for j in range(10):
+		if(table[i,j]=='d'):
+			table[i,j] = 1
+
+		if(table[i,j]=='n'):
+			table[i,j] = 2
+
+		if(table[i,j]=='p'):
+			table[i,j] = 3
+
+		if(table[i,j]=='r'):
+			table[i,j] = 4
+
+		if(table[i,j]=='u'):
+			table[i,j] = 5
+
+
+table.astype(np.float)
+print(table.shape)
+print(table[0:: ,0::])
+
+
+
+
+training_label.astype(np.float)
+print(training_label.shape)
+print(training_label)
+
+
+gnb = GaussianNB()
+gnb.fit(table,training_label)
+
+
+
+
+
+
+
+
+
