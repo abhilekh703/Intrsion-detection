@@ -47,8 +47,8 @@ num_features = ["duration","src_bytes",
 
 
 testing= pandas.read_csv("testing", header=None, names = col_names)
-print "Testing dataset shape with label"
-print(testing.shape)
+# print "Testing dataset shape with label"
+# print(testing.shape)
 
 labels = testing['label']
 labels[labels=='back.'] = 'dos'
@@ -91,8 +91,8 @@ labels[labels=='httptunnel.'] = 'r2l'
 labels[labels=='worm.'] = 'r2l'
 labels[labels=='snmpguess.'] = 'r2l'
 
-print "types of attacks in testing dataset and  their percentage"
-print(labels.value_counts()/311029*100)
+# print "types of attacks in testing dataset and  their percentage"
+# print(labels.value_counts()/311029*100)
 
 labels = testing['label']
 labels[labels=='dos'] = '1'
@@ -101,14 +101,14 @@ labels[labels=='probe'] = '3'
 labels[labels=='r2l'] = '4'
 labels[labels=='u2r'] = '5'
 
-print "types of attacks in training dataset and  their percentage"
-print(labels.value_counts()/311029*100)
+# print "types of attacks in training dataset and  their percentage"
+# print(labels.value_counts()/311029*100)
 
 testing_features = testing[num_features]
-print "testing data features shape",testing_features.shape
+# print "testing data features shape",testing_features.shape
 
 testing_label = testing['label']
-print "testing data label shape",testing_label.shape
+# print "testing data label shape",testing_label.shape
 
 
 
@@ -117,8 +117,8 @@ print "testing data label shape",testing_label.shape
 #traing data preperation
 
 training = pandas.read_csv("training", header=None, names = col_names)
-print "Training dataset shape with label"
-print(training.shape)
+# print "Training dataset shape with label"
+# print(training.shape)
 
 labels = training['label']
 labels[labels=='back.'] = 'dos'
@@ -144,8 +144,8 @@ labels[labels=='teardrop.'] = 'dos'
 labels[labels=='warezclient.'] = 'r2l'
 labels[labels=='warezmaster.'] = 'r2l'
 
-print "types of attacks in training dataset and  their percentage"
-print(labels.value_counts()/494021*100)
+# print "types of attacks in training dataset and  their percentage"
+# print(labels.value_counts()/494021*100)
 
 labels = training['label']
 labels[labels=='dos'] = '1'
@@ -154,14 +154,14 @@ labels[labels=='probe'] = '3'
 labels[labels=='r2l'] = '4'
 labels[labels=='u2r'] = '5'
 
-print "types of attacks in training dataset and  their percentage"
-print(labels.value_counts()/494021*100)
+# print "types of attacks in training dataset and  their percentage"
+# print(labels.value_counts()/494021*100)
 
 training_features = training[num_features]
-print "training data features shape",training_features.shape
+# print "training data features shape",training_features.shape
 
 training_label = training['label']
-print "training data label shape",training_label.shape
+# print "training data label shape",training_label.shape
 
 
 
@@ -243,36 +243,36 @@ clf10.fit(subset10_features,subset10_label)
 
 #predicting on training dataset
 
-print "following are predictions from 10 classifiers on whole training dataset"
+# print "following are predictions from 10 classifiers on whole training dataset"
 pred1 = clf1.predict(training_features)
-print(pred1)
+# print(pred1)
 
 pred2 = clf2.predict(training_features)
-print(pred2)
+# print(pred2)
 
 pred3 = clf3.predict(training_features)
-print(pred3)
+# print(pred3)
 
 pred4 = clf4.predict(training_features)
-print(pred4)
+# print(pred4)
 
 pred5 = clf5.predict(training_features)
-print(pred5)
+# print(pred5)
 
 pred6 = clf6.predict(training_features)
-print(pred6)
+# print(pred6)
 
 pred7 = clf7.predict(training_features)
-print(pred7)
+# print(pred7)
 
 pred8 = clf8.predict(training_features)
-print(pred8)
+# print(pred8)
 
 pred9 = clf9.predict(training_features)
-print(pred9)
+# print(pred9)
 
 pred10 = clf10.predict(training_features)
-print(pred10)
+# print(pred10)
 
 
 
@@ -292,9 +292,22 @@ table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 #table[0:: ,10] = training_label
 
-print "combined table storing results of all 10 predictors on training dataset"
-print(table.shape)
-print(table[0:: ,0::])
+table2 = np.empty((494021,11),dtype='float')
+table2[0:: ,0] = pred1
+table2[0:: ,1] = pred2
+table2[0:: ,2] = pred3
+table2[0:: ,3] = pred4
+table2[0:: ,4] = pred5
+table2[0:: ,5] = pred6
+table2[0:: ,6] = pred7
+table2[0:: ,7] = pred8
+table2[0:: ,8] = pred9
+table2[0:: ,9] = pred10
+table2[0:: ,10] = training_label
+
+# print "combined table storing results of all 10 predictors on training dataset"
+# print(table.shape)
+# print(table[0:: ,0::])
 
 
 #Training naive bias classifier
@@ -310,37 +323,37 @@ gnb.fit(table,training_label)
 
 #predictions for testing data using tree classifier
 
-print "following are predictions from 10 classifiers on whole testing dataset"
+# print "following are predictions from 10 classifiers on whole testing dataset"
 
 pred1 = clf1.predict(testing_features)
-print(pred1)
+# print(pred1)
 
 pred2 = clf2.predict(testing_features)
-print(pred2)
+# print(pred2)
 
 pred3 = clf3.predict(testing_features)
-print(pred3)
+# print(pred3)
 
 pred4 = clf4.predict(testing_features)
-print(pred4)
+# print(pred4)
 
 pred5 = clf5.predict(testing_features)
-print(pred5)
+# print(pred5)
 
 pred6 = clf6.predict(testing_features)
-print(pred6)
+# print(pred6)
 
 pred7 = clf7.predict(testing_features)
-print(pred7)
+# print(pred7)
 
 pred8 = clf8.predict(testing_features)
-print(pred8)
+# print(pred8)
 
 pred9 = clf9.predict(testing_features)
-print(pred9)
+# print(pred9)
 
 pred10 = clf10.predict(testing_features)
-print(pred10)
+# print(pred10)
 
 
 #making a table of all training predictions
@@ -359,35 +372,20 @@ table[0:: ,9] = pred10
 #table[0:: ,10] = testing_label
 
 print "combined table storing results of all 10 predictors on testing dataset"
-print(table.shape)
-print(table[0:: ,0::])
+# print(table.shape)
+# print(table[0:: ,0::])
 
 #predictions naive bias classifier
 
 predictions = gnb.predict(table)
 print "final predictions on testing data using NB"
-print(predictions)
+#print(predictions)
 
 #finding accuracy
 print "accuracy"
 acc = accuracy_score(testing_label,predictions)
-print(acc*100)
+#print(acc*100)
 
-
-
-
-table2 = np.empty((494021,11),dtype='float')
-table2[0:: ,0] = pred1
-table2[0:: ,1] = pred2
-table2[0:: ,2] = pred3
-table2[0:: ,3] = pred4
-table2[0:: ,4] = pred5
-table2[0:: ,5] = pred6
-table2[0:: ,6] = pred7
-table2[0:: ,7] = pred8
-table2[0:: ,8] = pred9
-table2[0:: ,9] = pred10
-table2[0:: ,10] = training_label
 
 
 table3 = np.empty((311029,11),dtype='float')
@@ -406,7 +404,8 @@ table3[0:: ,10] = testing_label
 
 
 
-print(naivebayes(table2,table3))
+print(100*naivebayes(table2,table3))
+print(acc*100)
 
 
 
