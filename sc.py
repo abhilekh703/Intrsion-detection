@@ -14,6 +14,8 @@ from sklearn.naive_bayes import MultinomialNB
 
 from sklearn.model_selection import train_test_split
 
+from sklearn.metrics import confusion_matrix
+
 from nb import *
 
 
@@ -29,7 +31,7 @@ col_names = ["duration","protocol_type","service","flag","src_bytes",
     "dst_host_rerror_rate","dst_host_srv_rerror_rate","label"]
 
 
-num_features = ["duration","src_bytes",
+num_features = ["duration","protocol_type","flag","src_bytes",
     "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
     "logged_in","num_compromised","root_shell","su_attempted","num_root",
     "num_file_creations","num_shells","num_access_files",
@@ -49,6 +51,24 @@ num_features = ["duration","src_bytes",
 testing= pandas.read_csv("testing", header=None, names = col_names)
 # print "Testing dataset shape with label"
 # print(testing.shape)
+
+labels = testing['protocol_type']
+labels[labels=='icmp'] = 1
+labels[labels=='tcp'] = 2
+labels[labels=='udp'] = 3
+
+labels = testing['flag']
+labels[labels=='SF'] = 1
+labels[labels=='REJ'] = 2
+labels[labels=='S0'] = 3
+labels[labels=='RSTO'] = 4
+labels[labels=='RSTR'] = 5
+labels[labels=='S3'] = 6
+labels[labels=='SH'] = 7
+labels[labels=='S1'] = 8
+labels[labels=='S2'] = 9
+labels[labels=='OTH'] = 10
+labels[labels=='RSTOS0'] = 11
 
 labels = testing['label']
 labels[labels=='back.'] = 'dos'
@@ -119,6 +139,25 @@ testing_label = testing['label']
 training = pandas.read_csv("training", header=None, names = col_names)
 # print "Training dataset shape with label"
 # print(training.shape)
+
+labels = training['protocol_type']
+labels[labels=='icmp'] = 1
+labels[labels=='tcp'] = 2
+labels[labels=='udp'] = 3
+
+labels = training['flag']
+labels[labels=='SF'] = 1
+labels[labels=='REJ'] = 2
+labels[labels=='S0'] = 3
+labels[labels=='RSTO'] = 4
+labels[labels=='RSTR'] = 5
+labels[labels=='S3'] = 6
+labels[labels=='SH'] = 7
+labels[labels=='S1'] = 8
+labels[labels=='S2'] = 9
+labels[labels=='OTH'] = 10
+labels[labels=='RSTOS0'] = 11
+
 
 labels = training['label']
 labels[labels=='back.'] = 'dos'
@@ -404,8 +443,34 @@ table3[0:: ,10] = testing_label
 
 
 
-print(100*naivebayes(table2,table3))
+#print(100*naivebayes(table2,table3))
 print(acc*100)
 
+#generating confusion matrix using predictions and labels
+print "calculations using confusion matrix"
+confusion = confusion_matrix(predictions,testing_label)
+print(confusion)
 
+tdos = confusion[0][0]
+tnormal = confusion[1][1]
+tprobe = confusion[2][2]
+tr2l = confusion[3][3]
+tu2r = confusion[4][4]
+
+
+fdos = confusion[0][1] + confusion[0][2] + confusion[0][3] + confusion[0][4]
+fnormal = confusion[1][0] + confusion[1][2] + confusion[1][3] + confusion[1][4]
+fprobe = confusion[2][0] + confusion[2][1] + confusion[2][3] + confusion[2][4]
+fr2l = confusion[3][0] + confusion[3][1] + confusion[3][2] + confusion[3][4]
+fu2r = confusion[4][0] + confusion[4][1] + confusion[4][2] + confusion[4][3]
+
+conf_acc = (tdos + tnormal + tprobe + tr2l + tu2r)
+float(conf_acc)
+conf_acc = conf_acc*100/311029
+print("overall accuracy",conf_acc)
+
+dos_total = tdos+fdos
+float(dos_total)
+dos_acc = tdos/dos_total
+print(dos_acc*100)
 
