@@ -111,17 +111,91 @@ training_features = training[num_features]
 
 training_label = training['label']
 # print "training data label shape",training_label.shape
-print(labels.value_counts())
+#print(labels.value_counts())
 
 
+
+r,c = training.shape
+
+
+
+training.as_matrix()
+
+print(training.shape)
+
+
+for i in range(r):
+	print training[i,c-1]
+	if(training[i,c-1]=='5'):
+		subset1_features.append(training[i,0:c-2])
+		subset1_label.append(training[i,c-1])
 
 
 
 #making 10 subsets of training data
 
-unit = 494021/10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+unit = r/10
 subset1_features = training_features[0:unit]
+print(subset_features.type)
 subset1_label = training_label[0:unit]
+print(subset1_label.shape)
 
 
 subset2_features = training_features[unit:2*unit]
