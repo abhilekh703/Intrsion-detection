@@ -17,6 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 
 from nb import *
+#from _future_ import division
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -201,7 +202,7 @@ training_features = training[num_features]
 
 training_label = training['label']
 # print "training data label shape",training_label.shape
-
+print(labels.value_counts())
 
 
 
@@ -449,28 +450,58 @@ print(acc*100)
 #generating confusion matrix using predictions and labels
 print "calculations using confusion matrix"
 confusion = confusion_matrix(predictions,testing_label)
-print(confusion)
+#print(confusion)
 
-tdos = confusion[0][0]
-tnormal = confusion[1][1]
-tprobe = confusion[2][2]
-tr2l = confusion[3][3]
-tu2r = confusion[4][4]
+total = 311029
+re = np.empty((5,4),dtype='float')
+t2 = np.empty((5,3),dtype='float')
 
 
-fdos = confusion[0][1] + confusion[0][2] + confusion[0][3] + confusion[0][4]
-fnormal = confusion[1][0] + confusion[1][2] + confusion[1][3] + confusion[1][4]
-fprobe = confusion[2][0] + confusion[2][1] + confusion[2][3] + confusion[2][4]
-fr2l = confusion[3][0] + confusion[3][1] + confusion[3][2] + confusion[3][4]
-fu2r = confusion[4][0] + confusion[4][1] + confusion[4][2] + confusion[4][3]
+re[0][0]=confusion[0][0];
+re[0][1]=confusion[0][1]+confusion[0][2]+confusion[0][3]+confusion[0][4];
+re[0][2]=confusion[1][0]+confusion[2][0]+confusion[3][0]+confusion[4][0];
+re[0][3]=total - (re[0][0]+re[0][1]+re[0][2]);
 
-conf_acc = (tdos + tnormal + tprobe + tr2l + tu2r)
-float(conf_acc)
-conf_acc = conf_acc*100/311029
-print("overall accuracy",conf_acc)
+re[1][0]=confusion[1][1];
+re[1][1]=confusion[1][0]+confusion[1][2]+confusion[1][3]+confusion[1][4];
+re[1][2]=confusion[0][1]+confusion[2][1]+confusion[3][1]+confusion[4][1];
+re[1][3]=total - (re[1][0]+re[1][1]+re[1][2]);
 
-dos_total = tdos+fdos
-float(dos_total)
-dos_acc = tdos/dos_total
-print(dos_acc*100)
+re[2][0]=confusion[2][2];
+re[2][1]=confusion[2][0]+confusion[2][1]+confusion[2][3]+confusion[2][4];
+re[2][2]=confusion[0][2]+confusion[1][2]+confusion[3][2]+confusion[4][2];
+re[2][3]=total - (re[2][0]+re[2][1]+re[2][2]);
+
+re[3][0]=confusion[3][3];
+re[3][1]=confusion[3][0]+confusion[3][1]+confusion[3][2]+confusion[3][4];
+re[3][2]=confusion[0][3]+confusion[1][3]+confusion[2][3]+confusion[4][3];
+re[3][3]=total - (re[3][0]+re[3][1]+re[3][2]);
+
+re[4][0]=confusion[4][4];
+re[4][1]=confusion[4][0]+confusion[4][2]+confusion[4][3]+confusion[4][1];
+re[4][2]=confusion[1][4]+confusion[2][4]+confusion[3][4]+confusion[1][4];
+re[4][3]=total - (re[4][0]+re[4][1]+re[4][2]);
+
+
+t2[0][0]=(re[0][0]+re[0][2])/(re[0][0]+re[0][1]+re[0][2]+re[0][3]);
+t2[0][1]=re[0][0]/(re[0][0]+re[0][3]);
+t2[0][2]=re[0][1]/(re[0][1]+re[0][2]);
+
+t2[1][0]=(re[1][0]+re[1][2])/(re[1][0]+re[1][1]+re[1][2]+re[1][3]);
+t2[1][1]=re[1][0]/(re[1][0]+re[1][3]);
+t2[1][2]=re[1][1]/(re[1][1]+re[1][2]);
+
+t2[2][0]=(re[2][0]+re[2][2])/(re[2][0]+re[2][1]+re[2][2]+re[2][3]);
+t2[2][1]=re[2][0]/(re[2][0]+re[2][3]);
+t2[2][2]=re[2][1]/(re[2][1]+re[2][2]);
+
+t2[3][0]=(re[3][0]+re[3][2])/(re[3][0]+re[3][1]+re[3][2]+re[3][3]);
+t2[3][1]=re[3][0]/(re[3][0]+re[3][3]);
+t2[3][2]=re[3][1]/(re[3][1]+re[3][2]);
+
+t2[4][0]=(re[4][0]+re[4][2])/(re[4][0]+re[4][1]+re[4][2]+re[4][3]);
+t2[4][1]=re[4][0]/(re[4][0]+re[4][3]);
+t2[4][2]=re[4][1]/(re[4][1]+re[4][2]);
+
+#print(t2*100)
 
