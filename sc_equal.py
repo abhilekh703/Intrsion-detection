@@ -356,7 +356,7 @@ table2[0:: ,10] = training_label
 print"\n****Training Naive Bias Classifier*******\n"
 gnb = GaussianNB()
 gnb.fit(table,training_label)
-print"\n****Training Naive Bias Classifier ended*******\n"
+
 
 #predictions for testing data using tree classifier
 print"\n****Predictions on Testing data by Tree Classifier*******\n"
@@ -394,7 +394,8 @@ table3[0:: ,5] = pred6
 table3[0:: ,6] = pred7
 table3[0:: ,7] = pred8
 table3[0:: ,8] = pred9
-table3[0:: ,9] = pred10
+table3[0:: ,9] 
+= pred10
 table3[0:: ,10] = testing_label
 
 
@@ -407,7 +408,7 @@ print(predictions)
 
 print "\nAccuracy"
 print(100*naivebayes(table2,table3))
-
+print "Using the library"
 acc = accuracy_score(testing_label,predictions)
 print(acc*100)
 

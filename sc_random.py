@@ -303,13 +303,13 @@ table2[0:: ,9] = pred10
 table2[0:: ,10] = training_label
 
 #Training naive bias classifier
-# print"\n****Training Naive Bias Classifier*******\n"
-# gnb = GaussianNB()
-# gnb.fit(table,training_label)
+print"\n****Training Naive Bias Classifier*******\n"
+gnb = GaussianNB()
+gnb.fit(table,training_label)
 # print"\n****Training Naive Bias Classifier ended*******\n"
 
 #predictions for testing data using tree classifier
-# print"\n****Predictions on Testing data by Tree Classifier*******\n"
+print"\n****Predictions on Testing data by Tree Classifier*******\n"
 pred1 = clf1.predict(testing_features)
 pred2 = clf2.predict(testing_features)
 pred3 = clf3.predict(testing_features)
@@ -348,14 +348,14 @@ table3[0:: ,9] = pred10
 table3[0:: ,10] = testing_label
 
 
-# print"\n****Predictions on Testing data by Naive Bias*******\n"
-# predictions = gnb.predict(table)
-# print "final predictions on testing data using NB"
+print"\n****Predictions on Testing data by Naive Bias*******\n"
+predictions = gnb.predict(table)
+print "final predictions on testing data using NB"
 # print(predictions)
 
 #finding accuracy
 print "\nAccuracy"
 print(100*naivebayes(table2,table3))
-# print "Using the library"
-# acc = accuracy_score(testing_label,predictions)
-# print(acc*100)
+print "Using the library"
+acc = accuracy_score(testing_label,predictions)
+print(acc*100)
