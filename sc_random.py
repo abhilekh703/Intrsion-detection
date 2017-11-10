@@ -185,7 +185,7 @@ print"\nNumber of Testing examples are 311029"
 print"\nTypes of attacks and their percentages Dos(1),Normal(2),Probe(3),R2L(4),U2R(5) respectively are\n",testing_label.value_counts()/311029*100
 
 #making 10 subsubsets of training data
-print"\n****Subsets Formation*******\n"
+# print"\n****Subsets Formation*******\n"
 
 subset1 = training.sample(frac=0.1)
 subset2 = training.sample(frac=0.1)
@@ -230,7 +230,7 @@ subset10_label = subset10['label']
 
 #training 10 tree classiefiers
 
-print"\n****Tree Classifiers Training*******"
+# print"\n****Tree Classifiers Training*******"
 
 clf1 = tree.DecisionTreeClassifier()
 clf1.fit(subset1_features,subset1_label)
@@ -264,7 +264,7 @@ clf10 = tree.DecisionTreeClassifier()
 clf10.fit(subset10_features,subset10_label)
 
 #predicting on training datasubset
-print"\n****Predictions on Training data by Tree Classifier*******"
+# print"\n****Predictions on Training data by Tree Classifier*******"
 pred1 = clf1.predict(training_features)
 pred2 = clf2.predict(training_features)
 pred3 = clf3.predict(training_features)
@@ -289,7 +289,7 @@ table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 
-table2 = np.empty((494021,10),dtype='float')
+table2 = np.empty((494021,11),dtype='float')
 table2[0:: ,0] = pred1
 table2[0:: ,1] = pred2
 table2[0:: ,2] = pred3
@@ -300,15 +300,16 @@ table2[0:: ,6] = pred7
 table2[0:: ,7] = pred8
 table2[0:: ,8] = pred9
 table2[0:: ,9] = pred10
+table2[0:: ,10] = training_label
 
 #Training naive bias classifier
-print"\n****Training Naive Bias Classifier*******\n"
-gnb = GaussianNB()
-gnb.fit(table,training_label)
-print"\n****Training Naive Bias Classifier ended*******\n"
+# print"\n****Training Naive Bias Classifier*******\n"
+# gnb = GaussianNB()
+# gnb.fit(table,training_label)
+# print"\n****Training Naive Bias Classifier ended*******\n"
 
 #predictions for testing data using tree classifier
-print"\n****Predictions on Testing data by Tree Classifier*******\n"
+# print"\n****Predictions on Testing data by Tree Classifier*******\n"
 pred1 = clf1.predict(testing_features)
 pred2 = clf2.predict(testing_features)
 pred3 = clf3.predict(testing_features)
@@ -333,13 +334,28 @@ table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 
+table3 = np.empty((311029,11),dtype='float')
+table3[0:: ,0] = pred1
+table3[0:: ,1] = pred2
+table3[0:: ,2] = pred3
+table3[0:: ,3] = pred4
+table3[0:: ,4] = pred5
+table3[0:: ,5] = pred6
+table3[0:: ,6] = pred7
+table3[0:: ,7] = pred8
+table3[0:: ,8] = pred9
+table3[0:: ,9] = pred10
+table3[0:: ,10] = testing_label
 
-print"\n****Predictions on Testing data by Naive Bias*******\n"
-predictions = gnb.predict(table)
-print "final predictions on testing data using NB"
-print(predictions)
+
+# print"\n****Predictions on Testing data by Naive Bias*******\n"
+# predictions = gnb.predict(table)
+# print "final predictions on testing data using NB"
+# print(predictions)
 
 #finding accuracy
 print "\nAccuracy"
-acc = accuracy_score(testing_label,predictions)
-print(acc*100)
+print(100*naivebayes(table2,table3))
+# print "Using the library"
+# acc = accuracy_score(testing_label,predictions)
+# print(acc*100)

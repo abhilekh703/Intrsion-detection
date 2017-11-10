@@ -281,7 +281,7 @@ table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 
-table2 = np.empty((494021,10),dtype='float')
+table2 = np.empty((494021,11),dtype='float')
 table2[0:: ,0] = pred1
 table2[0:: ,1] = pred2
 table2[0:: ,2] = pred3
@@ -292,6 +292,7 @@ table2[0:: ,6] = pred7
 table2[0:: ,7] = pred8
 table2[0:: ,8] = pred9
 table2[0:: ,9] = pred10
+table2[0:: ,10] = training_label
 
 #Training naive bias classifier
 print"\n****Training Naive Bias Classifier*******\n"
@@ -325,6 +326,19 @@ table[0:: ,7] = pred8
 table[0:: ,8] = pred9
 table[0:: ,9] = pred10
 
+table3 = np.empty((311029,11),dtype='float')
+table3[0:: ,0] = pred1
+table3[0:: ,1] = pred2
+table3[0:: ,2] = pred3
+table3[0:: ,3] = pred4
+table3[0:: ,4] = pred5
+table3[0:: ,5] = pred6
+table3[0:: ,6] = pred7
+table3[0:: ,7] = pred8
+table3[0:: ,8] = pred9
+table3[0:: ,9] = pred10
+table3[0:: ,10] = testing_label
+
 
 print"\n****Predictions on Testing data by Naive Bias*******\n"
 predictions = gnb.predict(table)
@@ -333,6 +347,8 @@ print(predictions)
 
 #finding accuracy
 print "\nAccuracy"
+print(100*naivebayes(table2,table3))
+
 acc = accuracy_score(testing_label,predictions)
 print(acc*100)
 
